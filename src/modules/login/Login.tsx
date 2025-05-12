@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     View,
     Text,
@@ -7,9 +7,23 @@ import {
 
 export default () => {
 
+    const [loginType, setLoginType] = useState<'login' | 'register'>('login');
+
+    const renderLogin = () => {
+        
+    }
+
+    const renderRegister = () => {
+        
+    }
+
     return(
         <View style={styles.root}>
-            <Text>Welcome to the App!</Text>
+            {
+                loginType === 'login' ? 
+                renderLogin() : renderRegister()
+                
+            }
         </View>
     );
 }

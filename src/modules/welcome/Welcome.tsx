@@ -1,3 +1,5 @@
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useEffect } from 'react';
 import {
     View,
@@ -19,6 +21,18 @@ const styles = StyleSheet.create({
 
 export default () => {
 
+    const navigation = useNavigation<StackNavigationProp<any>>();
+    
+    useEffect(() => {
+        setTimeout(() => {
+            startLogin();
+        }, 3000);
+    }, []);
+
+    const startLogin = () => {
+        navigation.replace('Login');
+    }
+
     return(
         <View style={[styles.root, { paddingTop: '30%' }]}>
             <Text style={[styles.text, { textAlign: 'center' }]}>
@@ -27,3 +41,5 @@ export default () => {
         </View>
     );
 }
+
+
