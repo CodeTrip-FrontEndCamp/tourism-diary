@@ -20,7 +20,9 @@ function App(): JSX.Element {
         backgroundColor={'white'}
       />
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator
+          initialRouteName="PageB"
+        >
           <Stack.Screen
             name="PageA"
             component={PageA}
