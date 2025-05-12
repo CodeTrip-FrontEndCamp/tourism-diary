@@ -9,6 +9,8 @@ import {
     Button
 } from 'react-native'
 
+import { StackNavigationProp } from '@react-navigation/stack';
+
 export default () => {
 
     const [loginType, setLoginType] = useState<'login' | 'register'>('login');
@@ -20,7 +22,7 @@ export default () => {
     const [username, setUsername] = useState('');
     const [registerPassword, setRegisterPassword] = useState('');
 
-    const navigation = useNavigation();
+    const navigation = useNavigation<StackNavigationProp<any>>();
 
     const handleBack = () => {
         navigation.goBack();
@@ -54,6 +56,7 @@ export default () => {
                 <Button title="登录" onPress={() => {
                     // Handle login logic here
                     console.log('Login attempt with:', email, password);
+                    navigation.replace('HomeTab');
                 }} />
                 <View style={styles.promptContainer}>
                     <Text style={styles.promptText}>没有账号，请</Text>
@@ -88,12 +91,14 @@ export default () => {
                     style={styles.input}
                     placeholder="密码"
                     value={registerPassword} // 使用顶层 state
-                    onChangeText={setRegisterPassword} // 使用顶层 state setter
+                    // 使用顶层 state setter
                     secureTextEntry
                 />
                 <Button title="注册" onPress={() => {
                     // Handle registration logic here
                     console.log('Register attempt with:', registerEmail, username, registerPassword);
+                    // After successful registration, switch back to login screen
+                    setLoginType('login');
                 }} />
                 <View style={styles.promptContainer}>
                     <Text style={styles.promptText}>已有账号，请</Text>
@@ -105,12 +110,12 @@ export default () => {
         );
     }
 
-    return(
+    return (
         <View style={styles.root}>
             {renderBackButton()}
             {
                 loginType === 'login' ?
-                renderLogin() : renderRegister()
+                    renderLogin() : renderRegister()
             }
         </View>
     );
