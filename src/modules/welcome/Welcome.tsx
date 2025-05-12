@@ -25,12 +25,12 @@ export default () => {
     
     useEffect(() => {
         setTimeout(() => {
-            startLogin();
+            startHome();
         }, 3000);
     }, []);
 
-    const startLogin = () => {
-        navigation.replace('Login');
+    const startHome = () => {
+        navigation.replace('HomeTab');
     }
 
     return(

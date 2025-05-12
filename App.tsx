@@ -8,6 +8,7 @@ import { createStackNavigator, TransitionPresets } from '@react-navigation/stack
 
 import Welcome from './src/modules/welcome/Welcome';
 import Login from './src/modules/login/Login';
+import HomeTab from './src/modules/home/HomeTab';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,14 @@ function App(): JSX.Element {
           <Stack.Screen
             name="Welcome"
             component={Welcome}
+            options={{
+              headerShown: false,
+              ...TransitionPresets.SlideFromLeftIOS,
+            }}
+          />
+          <Stack.Screen
+            name="HomeTab"
+            component={HomeTab}
             options={{
               headerShown: false,
               ...TransitionPresets.SlideFromLeftIOS,
