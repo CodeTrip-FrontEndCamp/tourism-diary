@@ -1,20 +1,46 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { JSX } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import {
+  StatusBar,
+} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 
-export default function App() {
+import PageA from './src/modules/PageA';
+import PageB from './src/modules/PageB';
+
+const Stack = createStackNavigator();
+
+function App(): JSX.Element {
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider style={{ width: '100%', height: '100%' }}>
+      <StatusBar
+        barStyle={'dark-content'}
+        backgroundColor={'white'}
+      />
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="PageA"
+            component={PageA}
+            options={{
+              headerShown: false,
+              ...TransitionPresets.SlideFromRightIOS,
+            }}
+          />
+          <Stack.Screen
+            name="PageB"
+            component={PageB}
+            options={{
+              headerShown: false,
+              ...TransitionPresets.SlideFromRightIOS,
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
