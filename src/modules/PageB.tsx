@@ -12,7 +12,9 @@ export default () => {
     const navigation = useNavigation<StackNavigationProp<any>>();
 
     const onButtonPress = () => {
-        navigation.goBack();
+        if (navigation.canGoBack()) {
+            navigation.goBack();
+        }
     }
 
     return (
