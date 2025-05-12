@@ -9,7 +9,11 @@ export default () => {
 
     return(
         <View style={styles.root}>
-            
+            <Text style={{
+                fontSize: 20,
+                color: 'black',
+                fontWeight: 'bold',
+            }}>首页</Text>
         </View>
     );
 }
