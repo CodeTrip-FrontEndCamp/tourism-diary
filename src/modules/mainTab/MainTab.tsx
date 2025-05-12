@@ -41,7 +41,7 @@ export default () => {
                     component={Home}
                     options={{
                         title: '首页',
-                        headerShown: false,
+                        headerShown: true,
                     }}
                 />
                 <BottomTab.Screen
@@ -49,7 +49,7 @@ export default () => {
                     component={Profile}
                     options={{
                         title: '我的',
-                        headerShown: false,
+                        headerShown: true,
                     }}
                 />
             </BottomTab.Navigator>
