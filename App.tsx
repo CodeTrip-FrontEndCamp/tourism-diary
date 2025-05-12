@@ -31,6 +31,7 @@ function App(): JSX.Element {
             component={PageA}
             options={{
               headerShown: false,
+              ...TransitionPresets.SlideFromLeftIOS,
             }}
           />
           <Stack.Screen
@@ -38,6 +39,7 @@ function App(): JSX.Element {
             component={PageB}
             options={{
               headerShown: false,
+              ...TransitionPresets.SlideFromRightIOS,
             }}
           />
         </Stack.Navigator>
