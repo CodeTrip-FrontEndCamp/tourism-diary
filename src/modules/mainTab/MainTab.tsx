@@ -1,47 +1,78 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     View,
+    Image,
     Text,
     StyleSheet,
     TouchableOpacity,
-    Image
+    Alert
 } from 'react-native'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {
+    createBottomTabNavigator,
+} from '@react-navigation/bottom-tabs';
+import * as ImagePicker from 'expo-image-picker'; // 替换 react-native-image-picker
+import { manipulateAsync, SaveFormat } from 'expo-image-manipulator'; // 引入压缩图片的库
 
 const BottomTab = createBottomTabNavigator();
 
 import Home from '../home/Home';
-import Profile from '../profile/Profile';
-import { launchImageLibrary, ImagePickerResponse } from 'react-native-image-picker';
-
+import Mine from '../profile/Profile';
 
 import icon_tab_publish from '../../assets/icon_tab_publish.png';
 
 export default () => {
+    const [imageUri, setImageUri] = useState<string | null>(null);
 
     const RedBookTabBar = ({ state, descriptors, navigation }: any) => {
         const { routes, index } = state;
 
-        const onPublishPress = () => {
-            launchImageLibrary(
-                {
-                    mediaType: 'photo',
+        const compressImage = async (uri: string, quality = 0.2, maxWidth = 640) => {
+            try {
+                const mainpResult = await manipulateAsync(
+                    uri,
+                    [
+                        { resize: { width: maxWidth } }
+                    ],
+                    {
+                        compress: quality,
+                        format: SaveFormat.JPEG,
+                    },
+
+                )
+                return mainpResult
+            } catch (error) {
+                console.log(error)
+                return null
+            }
+        }
+
+        const pickImage = async () => {
+            try {
+                // No permissions request is necessary for launching the image library
+                let result = await ImagePicker.launchImageLibraryAsync({
+                    mediaTypes: ['images', 'videos'],
+                    allowsEditing: true,
+                    aspect: [4, 3],
                     quality: 1,
-                    includeBase64: true,
-                },
-                (res: ImagePickerResponse) => {
-                    const { assets } = res;
-                    if (!assets?.length) {
-                        console.log('选择图片失败');
-                        return;
+                });
+
+
+                if (!result.canceled) {
+                    const compressedImage = await compressImage(result.assets[0].uri)
+                    if (compressedImage) {
+                        // setImage(compressedImage.uri)
+                        // const {fileId, fileUrl} = await uploadFile(ID.unique() , compressedImage)
+                        setImageUri(compressedImage.uri) // 只设置 URI
                     }
-                    const {
-                        uri, width, height, fileName, fileSize, type
-                    } = assets[0];
-                    console.log(`uri=${uri}, width=${width}, height=${height}`);
-                    console.log(`fileName=${fileName}, fileSize=${fileSize}, type=${type}`);
                 }
-            );
+            } catch (error) {
+                console.log(error)
+                Alert.alert('图片选择失败')
+            }
+        };
+
+        const onPublishPress = () => {
+            pickImage();
         }
 
         return (
@@ -53,13 +84,20 @@ export default () => {
 
                     if (i === 1) {
                         return (
-                            <TouchableOpacity
-                                key={label}
-                                style={styles.tabItem}
-                                onPress={onPublishPress}
-                            >
-                                <Image style={styles.icon_tab_publish} source={icon_tab_publish} />
-                            </TouchableOpacity>
+                            <View style={styles.tabItem} key={label}>
+                                {/* 发布按钮 */}
+                                <TouchableOpacity
+                                    style={{
+                                        width: 58,
+                                        height: 42,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }}
+                                    onPress={onPublishPress}
+                                >
+                                    <Image style={styles.icon_tab_publish} source={icon_tab_publish} />
+                                </TouchableOpacity>
+                            </View>
                         )
                     }
                     return (
@@ -87,33 +125,10 @@ export default () => {
     return (
         <View style={styles.root}>
             <BottomTab.Navigator
-                /* screenOptions={({ route }) => {
-                    return {
-                        tabBarIcon: ({ focused, color, size }) => {
-                            let iconName;
-                            if (route.name === 'Home') {
-                                iconName = focused ? 'home' : 'home-outline';
-                            } else if (route.name === 'Profile') {
-                                iconName = focused ? 'person' : 'person-outline';
-                            }
-                            return (
-                                <Ionicons
-                                    name={iconName || 'help-circle-outline'}
-                                    size={size}
-                                    color={color}
-                                />
-                            );
-                        },
-                        // 为整个标签栏增加一些空间以容纳突出的发布按钮
-                        tabBarStyle: {
-                            height: 60,
-                        }
-                    };
-                }} */
                 tabBar={props => <RedBookTabBar {...props} />}
             >
                 <BottomTab.Screen
-                    name="Home"
+                    name='Home'
                     component={Home}
                     options={{
                         title: '首页',
@@ -122,24 +137,23 @@ export default () => {
                 />
 
                 <BottomTab.Screen
-                    name="Publish"
+                    name='Publish'
                     component={Home}
                     options={{
                         title: '发布',
-                        headerShown: true,
+                        headerShown: false,
                     }}
                 />
-
-                < BottomTab.Screen
-                    name="Profile"
-                    component={Profile}
+                <BottomTab.Screen
+                    name='Mine'
+                    component={Mine}
                     options={{
-                        title: '我的',
+                        title: '我',
                         headerShown: true,
                     }}
                 />
-            </BottomTab.Navigator >
-        </View >
+            </BottomTab.Navigator>
+        </View>
     );
 }
 
@@ -147,16 +161,6 @@ const styles = StyleSheet.create({
     root: {
         width: '100%',
         height: '100%',
-    },
-    publishButtonContainer: {
-        position: 'relative',
-        alignItems: 'center',
-    },
-
-    publishIcon: {
-        color: '#FFFFFF',    // 白色文本
-        fontSize: 30,        // 文字大小
-        fontWeight: 'bold',  // 加粗
     },
     tabBarContainer: {
         width: '100%',
@@ -176,4 +180,4 @@ const styles = StyleSheet.create({
         height: 42,
         resizeMode: 'contain',
     },
-});
+})
