@@ -6,8 +6,8 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 
-import PageA from './src/modules/PageA';
-import PageB from './src/modules/PageB';
+import Welcome from './src/modules/welcome/Welcome';
+import Login from './src/modules/login/Login';
 
 const Stack = createStackNavigator();
 
@@ -21,22 +21,22 @@ function App(): JSX.Element {
       />
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="PageA"
+          initialRouteName="Welcome"
           screenOptions={{
             cardStyle: { elevation: 1, },
           }}
         >
           <Stack.Screen
-            name="PageA"
-            component={PageA}
+            name="Welcome"
+            component={Welcome}
             options={{
               headerShown: false,
               ...TransitionPresets.SlideFromLeftIOS,
             }}
           />
           <Stack.Screen
-            name="PageB"
-            component={PageB}
+            name="Login"
+            component={Login}
             options={{
               headerShown: false,
               ...TransitionPresets.SlideFromRightIOS,
