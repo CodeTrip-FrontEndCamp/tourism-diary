@@ -8,7 +8,7 @@ import { createStackNavigator, TransitionPresets } from '@react-navigation/stack
 
 import Welcome from './src/modules/welcome/Welcome';
 import Login from './src/modules/login/Login';
-import HomeTab from './src/modules/home/HomeTab';
+import HomeTab from './src/modules/mainTab/MainTab';
 
 const Stack = createStackNavigator();
 
