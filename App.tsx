@@ -21,14 +21,16 @@ function App(): JSX.Element {
       />
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="PageB"
+          initialRouteName="PageA"
+          screenOptions={{
+            cardStyle: { elevation: 1, },
+          }}
         >
           <Stack.Screen
             name="PageA"
             component={PageA}
             options={{
               headerShown: false,
-              ...TransitionPresets.SlideFromRightIOS,
             }}
           />
           <Stack.Screen
@@ -36,7 +38,6 @@ function App(): JSX.Element {
             component={PageB}
             options={{
               headerShown: false,
-              ...TransitionPresets.SlideFromRightIOS,
             }}
           />
         </Stack.Navigator>
