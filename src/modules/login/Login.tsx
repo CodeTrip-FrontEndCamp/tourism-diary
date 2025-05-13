@@ -1,4 +1,38 @@
-import { useNavigation } from '@react-navigation/native';
+import React from "react";
+import {
+    View,
+    Image,
+    StyleSheet,
+} from "react-native";
+
+export default () => {
+    return (
+        <View style={styles.root}>
+            <Image
+                source={require('../../assets/images/login.png')}
+                style={styles.image}
+            />
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+    root: {
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'white',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center', // Center content vertically
+    },
+    image: {
+        width: 300,
+        height: 300,
+    }
+});
+
+
+/* import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import {
     View,
@@ -8,6 +42,8 @@ import {
     TouchableOpacity,
     Button
 } from 'react-native'
+
+import { get } from '../../utils/request';
 
 import { StackNavigationProp } from '@react-navigation/stack';
 
@@ -34,7 +70,16 @@ export default () => {
         </TouchableOpacity>
     );
 
+    const onLoginPress = async() => {
+        
+            // Handle login logic here
+            console.log('Login attempt with:', email, password);
+            navigation.replace('HomeTab');
+        
+    }
+
     const renderLogin = () => {
+
         return (
             <View style={styles.formContainer}>
                 <Text style={styles.title}>登录</Text>
@@ -53,11 +98,7 @@ export default () => {
                     onChangeText={setPassword}
                     secureTextEntry
                 />
-                <Button title="登录" onPress={() => {
-                    // Handle login logic here
-                    console.log('Login attempt with:', email, password);
-                    navigation.replace('HomeTab');
-                }} />
+                <Button title="登录" onPress={onLoginPress} />
                 <View style={styles.promptContainer}>
                     <Text style={styles.promptText}>没有账号，请</Text>
                     <TouchableOpacity onPress={() => setLoginType('register')}>
@@ -179,3 +220,4 @@ const styles = StyleSheet.create({
         color: 'blue', // Or your preferred color
     },
 });
+ */
