@@ -14,13 +14,13 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 import { formatPhone, replaceBlank } from '../../utils/StringUtil';
-/* import UserStore from '../../stores/UserStore';
-import Toast from '../../components/widget/Toast'; */
+import UserStore from '../../stores/UserStore';
+import Toast from '../../components/widget/Toast';
 
 import icon_logo_main from '../../assets/icon_main_logo.png';
 import icon_unselected from '../../assets/icon_unselected.png';
 import icon_selected from '../../assets/icon_selected.png';
-import  icon_arrow from '../../assets/icon_arrow.png';
+import icon_arrow from '../../assets/icon_arrow.png';
 import icon_wx_small from '../../assets/icon_wx_small.png';
 import icon_triangle from '../../assets/icon_triangle.png';
 import icon_eye_open from '../../assets/icon_eye_open.png';
@@ -32,7 +32,7 @@ import icon_close_modal from '../../assets/icon_close_modal.png';
 
 export default () => {
 
-    const [loginType, setLoginType] = useState<'quick' | 'input'>('quick');
+    const [loginType, setLoginType] = useState<'quick' | 'input'>('input');
     const [check, setCheck] = useState<boolean>(false);
     const [eyeOpen, setEyeOpen] = useState<boolean>(true);
 
@@ -47,13 +47,13 @@ export default () => {
             return;
         }
 
-       /*  UserStore.requestLogin(replaceBlank(phone), pwd, (success: boolean) => {
+        UserStore.requestLogin(replaceBlank(phone), pwd, (success: boolean) => {
             if (success) {
                 navigation.replace('MainTab');
             } else {
                 Toast.show('登陆失败，请检查用户名和密码');
             }
-        }) */
+        })
     }
 
     const renderQuickLogin = () => {
@@ -123,6 +123,15 @@ export default () => {
                 position: 'absolute',
                 top: 170,
             },
+            closeButton: {
+                position: 'absolute',
+                left: 36,
+                top: 24,
+            },
+            closeImg: {
+                width: 28,
+                height: 28,
+            },
         });
         return (
             <View style={styles.root}>
@@ -172,7 +181,15 @@ export default () => {
                 >
                     <Text style={styles.oneKeyLoginTxt}>一键登陆</Text>
                 </TouchableOpacity>
-
+                <TouchableOpacity
+                    style={styles.closeButton}
+                    onPress={() => {
+                        LayoutAnimation.easeInEaseOut();
+                        navigation.goBack();
+                    }}
+                >
+                    <Image style={styles.closeImg} source={icon_close_modal} />
+                </TouchableOpacity>
                 <Image style={styles.logoMain} source={icon_logo_main} />
             </View>
         );
@@ -237,7 +254,7 @@ export default () => {
             },
             pwdInput: {
                 marginLeft: 0,
-                marginRight:16,
+                marginRight: 16,
             },
             iconEye: {
                 width: 30,
@@ -314,19 +331,13 @@ export default () => {
         const canLogin = phone?.length === 13 && pwd?.length === 6;
         return (
             <View style={styles.root}>
-                <Text style={styles.pwdLogin}>密码登陆</Text>
-                <Text style={styles.tip}>
-                    未注册的手机号登陆成功后将自动注册
-                </Text>
+                <Text style={styles.pwdLogin}>登陆</Text>
                 <View style={styles.phoneLayout}>
-                    <Text style={styles.pre86}>+86</Text>
-                    <Image style={styles.triangle} source={icon_triangle} />
                     <TextInput
                         style={styles.phoneInput}
                         placeholderTextColor="#bbb"
                         placeholder='请输入手机号码'
                         autoFocus={false}
-                        keyboardType='number-pad'
                         maxLength={13}
                         value={phone}
                         onChangeText={(text: string) => {
@@ -386,19 +397,6 @@ export default () => {
                             source={check ? icon_selected : icon_unselected}
                         />
                     </TouchableOpacity>
-                    <Text style={allStyles.lableTxt}>我已阅读并同意</Text>
-                    <TouchableOpacity
-                        onPress={() => {
-                            Linking.openURL('https://www.baidu.com')
-                        }}
-                    >
-                        <Text style={allStyles.protocolTxt}>《用户协议》和《隐私政策》</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={styles.wxqqLayout}>
-                    <Image style={styles.iconWx} source={icon_wx} />
-                    <Image style={styles.iconQQ} source={icon_qq} />
                 </View>
 
                 <TouchableOpacity
@@ -414,11 +412,11 @@ export default () => {
         );
     }
 
-    return(
+    return (
         <View style={allStyles.root}>
             {
                 loginType === 'quick' ?
-                renderQuickLogin() : renderInputLogin()
+                    renderQuickLogin() : renderInputLogin()
             }
         </View>
     );
